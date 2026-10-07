@@ -2,6 +2,8 @@
 
 A mobile-first quiz app for practicing the technical questions junior developers get in job interviews. It is a **PWA** (Progressive Web App): a website you can install on your phone's home screen and use like a normal app, even offline.
 
+**Live app: https://horizonchess.github.io/Developer-quiz/**
+
 > Status: **step 1 of 4, the app skeleton.** The screens and quiz flow work, with a handful of placeholder questions. The full question bank, saved progress, and publishing come next.
 
 ## Screens
@@ -12,6 +14,19 @@ A mobile-first quiz app for practicing the technical questions junior developers
 | Topics | `#/topics` | List of topics with question counts |
 | Quiz | `#/quiz/<topic>` | One question at a time, instant feedback and explanation |
 | Results | `#/results` | Score, plus the questions you missed with their answers |
+
+## Install it on your phone
+
+Open the live app link above on your phone, then:
+
+- **Android (Chrome):** tap ⋮, then **Add to Home screen**.
+- **iPhone (Safari):** tap Share, then **Add to Home Screen**.
+
+It then opens full-screen like a normal app and works offline.
+
+## Publishing
+
+Every push to the `main` branch publishes the app automatically. The workflow in `.github/workflows/deploy.yml` (a GitHub Actions instruction file) builds the app on GitHub's computers and puts the result on **GitHub Pages**, GitHub's free website hosting. It usually takes about a minute. You can watch it, or run it by hand, from the repository's **Actions** tab.
 
 ## Run it on your computer
 
@@ -50,6 +65,7 @@ src/
     quiz.js           picks and shuffles questions and answer options
 public/               icons used for the installed app
 vite.config.js        build settings, including the PWA setup
+.github/workflows/    the automatic publish to GitHub Pages
 ```
 
 ### Adding a question
@@ -82,4 +98,4 @@ Add an object to `src/data/questions.js`:
 1. ~~App skeleton: screens, navigation, PWA setup~~
 2. Large question bank across all topics, with templates that vary names and values
 3. Saved progress, score history and weak-topic tracking (on the device)
-4. Visual polish, phone testing, and free hosting
+4. Visual polish and phone testing (free hosting is already live)

@@ -82,7 +82,12 @@ export default function Quiz() {
       <section className="card question" key={question.id}>
         {question.type === 'code-output' && <span className="tag">Code output</span>}
         <h1 className="question-prompt">{question.prompt}</h1>
-        {question.code && <pre className="code"><code>{question.code}</code></pre>}
+        {question.code && (
+          // Long lines (like SQL tables) get a smaller font so they fit on a phone.
+          <pre className={question.code.split('\n').some((l) => l.length > 36) ? 'code wide' : 'code'}>
+            <code>{question.code}</code>
+          </pre>
+        )}
       </section>
 
       <ul className="options">
@@ -90,7 +95,7 @@ export default function Quiz() {
           <li key={i}>
             <button className={optionClass(i)} onClick={() => choose(i)} disabled={answered}>
               <span className="option-letter">{LETTERS[i]}</span>
-              <span className="option-text">{opt}</span>
+              <span className={question.type === 'code-output' ? 'option-text mono' : 'option-text'}>{opt}</span>
             </button>
           </li>
         ))}

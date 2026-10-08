@@ -151,6 +151,7 @@ button { font: inherit; color: inherit; }
   background: var(--code-bg); color: var(--code-text);
   font: 0.9rem/1.55 ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
 }
+.code.wide { font-size: 0.78rem; }
 .code.small { font-size: 0.8rem; margin: 8px 0; }
 
 .options { display: flex; flex-direction: column; gap: 10px; }
@@ -166,7 +167,8 @@ button { font: inherit; color: inherit; }
   flex: none; display: grid; place-items: center; width: 30px; height: 30px; border-radius: 8px;
   font-weight: 700; font-size: 0.85rem; background: var(--surface-2); color: var(--muted);
 }
-.option-text { flex: 1; }
+.option-text { flex: 1; overflow-wrap: anywhere; }
+.option-text.mono { font: 0.92rem/1.45 ui-monospace, 'SF Mono', Menlo, Consolas, monospace; }
 .option.correct { border-color: var(--success); background: var(--success-bg); }
 .option.correct .option-letter { background: var(--success); color: #fff; }
 .option.wrong { border-color: var(--danger); background: var(--danger-bg); }

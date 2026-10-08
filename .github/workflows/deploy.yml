@@ -25,6 +25,7 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - run: npm test # don't publish if a question is broken
       - run: npm run build
       - uses: actions/upload-pages-artifact@v3
         with:

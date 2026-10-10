@@ -137,7 +137,8 @@ button { font: inherit; color: inherit; }
 .topic-count { color: var(--muted); font-size: 0.85rem; font-weight: 600; }
 
 /* ---------- Quiz ---------- */
-.quiz { gap: 16px; padding-bottom: 84px; }
+.app-main:has(.quiz) { display: flex; flex-direction: column; }
+.quiz { flex: 1; gap: 16px; }
 .quiz-top { display: flex; justify-content: space-between; font-weight: 600; font-size: 0.9rem; color: var(--muted); }
 .progress { height: 8px; border-radius: 999px; background: var(--surface-2); overflow: hidden; margin-top: -8px; }
 .progress-bar { height: 100%; background: var(--primary); border-radius: inherit; transition: width 0.3s ease; }
@@ -176,7 +177,6 @@ button { font: inherit; color: inherit; }
 .option.dimmed { opacity: 0.55; }
 
 .feedback {
-  scroll-margin-bottom: 96px;
   padding: 14px 16px; border-radius: 14px; border-left: 4px solid;
   animation: rise 0.2s ease-out;
 }
@@ -185,9 +185,12 @@ button { font: inherit; color: inherit; }
 .feedback p { margin-top: 4px; }
 @keyframes rise { from { opacity: 0; transform: translateY(6px); } }
 
-/* Next button stays at the bottom, within thumb reach. */
+/* Next button stays at the bottom, within thumb reach. It is "sticky" rather
+   than "fixed", so it keeps its own space at the end of the page and can never
+   cover the explanation once you scroll down. */
 .bottom-bar {
-  position: fixed; left: 0; right: 0; bottom: 0; z-index: 10;
+  position: sticky; bottom: 0; z-index: 10;
+  margin: auto -16px calc(-24px - env(safe-area-inset-bottom));
   padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
   background: color-mix(in srgb, var(--bg) 90%, transparent);
   backdrop-filter: blur(12px); border-top: 1px solid var(--border);

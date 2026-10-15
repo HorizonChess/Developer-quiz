@@ -92,3 +92,46 @@ test('code questions print what the correct answer says', async () => {
   }
   assert.deepEqual(failures, [], `\n${failures.join('\n\n')}`)
 })
+
+// Answer options should not give the answer away by their length. In
+// multiple-choice questions every option must have a similar number of words,
+// and the correct one must not be clearly longer (or shorter) than the rest.
+// Code-output options are values like "NaN" or "3 4", so they are skipped.
+const words = (s) => s.trim().split(/\s+/).length
+
+export function lengthProblem(q) {
+  const counts = q.options.map(words)
+  const most = Math.max(...counts)
+  const least = Math.min(...counts)
+  if (most - least > 3 && most > least * 1.6) return `word counts too uneven (${counts.join(', ')})`
+  const right = counts[q.answer]
+  const others = counts.filter((_, i) => i !== q.answer)
+  const avg = others.reduce((a, b) => a + b, 0) / others.length
+  if (Math.abs(right - avg) > Math.max(2, avg * 0.35)) return `correct option stands out (${right} words vs about ${avg.toFixed(1)})`
+  return null
+}
+
+test('multiple-choice options have similar length', () => {
+  const problems = []
+  for (const def of QUESTION_BANK.filter((d) => d.type === 'multiple-choice')) {
+    for (const q of variants(def, SHAPE_SEEDS)) {
+      const problem = lengthProblem(q)
+      if (problem) {
+        problems.push(`${def.id}: ${problem}\n  ${q.options.join('\n  ')}`)
+        break
+      }
+    }
+  }
+  assert.deepEqual(problems, [], `\n${problems.join('\n\n')}`)
+})
+
+test('the correct option is not usually the longest', () => {
+  const qs = QUESTION_BANK.filter((d) => d.type === 'multiple-choice').flatMap((def) => variants(def, 3))
+  const longest = qs.filter((q) => {
+    const counts = q.options.map((o) => o.length)
+    return counts.every((c, i) => i === q.answer || c < counts[q.answer])
+  })
+  // By chance alone it would be about 1 in 4.
+  const share = longest.length / qs.length
+  assert.ok(share < 0.35, `correct option is the longest in ${Math.round(share * 100)}% of questions`)
+})

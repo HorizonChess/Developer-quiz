@@ -16,10 +16,20 @@ export default function Quiz() {
   const [selected, setSelected] = useState(null) // index of the chosen option, or null
   const [results, setResults] = useState([]) // one entry per answered question
   const feedbackRef = useRef(null)
+  const barRef = useRef(null)
 
-  // After answering, scroll the explanation into view (it can be below the fold on phones).
+  // After answering, scroll so the whole explanation sits just above the Next
+  // button (on phones it often starts below the bottom of the screen).
   useEffect(() => {
-    if (selected !== null) feedbackRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+    if (selected === null) return
+    const frame = requestAnimationFrame(() => {
+      const box = feedbackRef.current?.getBoundingClientRect()
+      const barHeight = barRef.current?.offsetHeight ?? 0
+      if (!box) return
+      const hidden = box.bottom - (window.innerHeight - barHeight - 12)
+      if (hidden > 0) window.scrollBy({ top: hidden, behavior: 'smooth' })
+    })
+    return () => cancelAnimationFrame(frame)
   }, [selected])
 
   // Each new question starts at the top of the screen.
@@ -108,7 +118,7 @@ export default function Quiz() {
         </section>
       )}
 
-      <div className="bottom-bar">
+      <div className="bottom-bar" ref={barRef}>
         <button className="btn btn-primary btn-lg" onClick={next} disabled={!answered}>
           {isLast ? 'See results' : 'Next question'}
         </button>
